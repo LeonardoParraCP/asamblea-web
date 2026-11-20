@@ -462,7 +462,7 @@ const App = (() => {
   }
 
   /* ================= invitar ================= */
-  const webBase = () => Native.kind === 'web' && /^https?:/.test(location.protocol) ? location.origin + location.pathname : Settings.webBase;
+  const webBase = () => Native.kind === 'web' && /^https?:/.test(location.protocol) ? location.origin + location.pathname : (Settings.webBase || WEB_BASE);
   let inviteClose = null;
   function inviteDialog() {
     const room = Mesh.room; if (!room) return;

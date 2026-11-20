@@ -72,8 +72,9 @@ const DEFAULTS = {
   destinations: [],
   layout: 'grid',
   nostr: true, autoAdmit: false, bigRoom: 6, relays: [],
-  webBase: 'https://leonardoparracp.github.io/asamblea-web/',
 };
+/* página pública para unirse sin instalar (estática; la invitación va después del #) */
+const WEB_BASE = 'https://leonardoparracp.github.io/asamblea-web/';
 const Settings = (() => {
   let s = {};
   try { s = JSON.parse(localStorage.getItem('asamblea.settings') || '{}'); } catch { s = {}; }
