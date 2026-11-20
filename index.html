@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob: mediastream:; worker-src blob:; connect-src 'self' blob: data: wss:; font-src 'self'">
+<title>Asamblea</title>
+<link rel="stylesheet" href="fonts/fonts.css">
+<link rel="stylesheet" href="css/app.css">
+<link rel="stylesheet" href="css/look.css">
+<meta name="theme-color" content="#0f0d0b">
+</head>
+<body>
+<div id="app">
+  <!-- ===== inicio ===== -->
+  <section id="lobby" class="screen">
+    <header class="brand">
+      <div class="logo" aria-hidden="true"></div>
+      <div>
+        <h1>Asamblea</h1>
+        <p class="tag">Videollamadas libres, directas entre equipos. Sin servidores, sin cuentas, sin límite de tiempo.</p>
+      </div>
+      <div class="emblem" aria-hidden="true"></div>
+      <button class="icon-btn" id="btnLook" title="Apariencia" aria-label="Apariencia">🎨</button>
+      <button class="icon-btn" id="btnSettings" title="Ajustes" aria-label="Ajustes">⚙</button>
+    </header>
+
+    <div class="lobby-grid">
+      <div class="card preview-card">
+        <div class="preview" id="preview">
+          <video id="selfPreview" muted playsinline autoplay></video>
+          <img id="selfAvatar" alt="">
+          <div class="meter"><i id="micMeter"></i></div>
+        </div>
+        <div class="row center gap">
+          <button class="round" id="pvMic" title="Micrófono">🎙</button>
+          <button class="round" id="pvCam" title="Cámara">📷</button>
+        </div>
+        <label class="field"><span>Tu nombre</span><input id="myName" maxlength="40" autocomplete="nickname" placeholder="¿Cómo te llamas?"></label>
+        <div class="field"><span>Avatar cuando la cámara está apagada</span>
+          <div class="seg" id="avatarSeg"></div>
+        </div>
+      </div>
+
+      <div class="card actions-card">
+        <h2>Crear una sala</h2>
+        <label class="field"><span>Nombre de la sala</span><input id="roomName" maxlength="60" placeholder="Asamblea del barrio"></label>
+        <label class="check"><input type="checkbox" id="roomPinOn"> Pedir PIN para entrar por red o IP</label>
+        <button class="btn primary big" id="btnCreate">Abrir sala</button>
+
+        <h2>Unirme a una sala</h2>
+        <div class="tabs" role="tablist">
+          <button role="tab" class="on" data-tab="tCode">Con código</button>
+          <button role="tab" data-tab="tLan">En mi red</button>
+          <button role="tab" data-tab="tIp">Por dirección IP</button>
+        </div>
+        <div class="tab on" id="tCode">
+          <p class="hint">Pega el enlace o el código de invitación que te enviaron (por WhatsApp, Telegram, correo…) o escanéalo.</p>
+          <textarea id="joinCode" rows="3" placeholder="https://…#ASR1-…  o  ASM1-…"></textarea>
+          <div class="row gap wrap">
+            <button class="btn" id="btnPasteJoin">Pegar</button>
+            <button class="btn" id="btnScanJoin">Escanear QR</button>
+            <button class="btn primary" id="btnJoinCode">Unirme</button>
+          </div>
+        </div>
+        <div class="tab" id="tLan">
+          <p class="hint">Salas abiertas en tu misma red wifi o cableada. Aparecen solas.</p>
+          <ul class="lan-list" id="lanList"><li class="empty">Buscando salas…</li></ul>
+        </div>
+        <div class="tab" id="tIp">
+          <p class="hint">La persona anfitriona ve su dirección y puerto en «Invitar».</p>
+          <div class="row gap">
+            <input id="ipHost" placeholder="192.168.1.20 o [2800:…]" class="grow">
+            <input id="ipPort" placeholder="47800" class="port" inputmode="numeric">
+          </div>
+          <input id="ipPin" placeholder="PIN (si la sala lo pide)" inputmode="numeric" maxlength="6">
+          <button class="btn primary" id="btnJoinIp">Conectar</button>
+        </div>
+      </div>
+    </div>
+    <footer class="foot">Software libre GPL-3.0 · Tinta Libre · <a href="#" id="lnkAbout">Cómo funciona</a></footer>
+  </section>
+
+  <!-- ===== sala ===== -->
+  <section id="room" class="screen hidden">
+    <header class="room-top">
+      <div class="room-title"><b id="roomTitle">Sala</b> <span id="roomTime">00:00</span></div>
+      <div class="badges" id="badges"></div>
+      <div class="people-count" id="peopleCount">1</div>
+    </header>
+    <div class="stage-wrap">
+      <main id="stage" class="stage"></main>
+      <aside id="side" class="side hidden">
+        <div class="side-head"><b id="sideTitle">Chat</b><button class="icon-btn" id="sideClose" aria-label="Cerrar">✕</button></div>
+        <div id="sideBody" class="side-body"></div>
+      </aside>
+    </div>
+    <nav class="bar" id="bar">
+      <button class="tool" id="tMic"><i>🎙</i><span>Micrófono</span></button>
+      <button class="tool" id="tCam"><i>📷</i><span>Cámara</span></button>
+      <button class="tool" id="tScreen"><i>🖥</i><span>Pantalla</span></button>
+      <button class="tool" id="tInvite"><i>➕</i><span>Invitar</span></button>
+      <button class="tool" id="tChat"><i>💬</i><span>Chat</span><em class="dot hidden" id="chatDot"></em></button>
+      <button class="tool" id="tHand"><i>✋</i><span>Mano</span></button>
+      <button class="tool" id="tRec"><i>⏺</i><span>Grabar</span></button>
+      <button class="tool" id="tLive"><i>📡</i><span>En vivo</span></button>
+      <button class="tool" id="tMore"><i>⋯</i><span>Más</span></button>
+      <button class="tool danger" id="tLeave"><i>✆</i><span>Salir</span></button>
+    </nav>
+  </section>
+</div>
+
+<div id="modal" class="modal hidden" role="dialog" aria-modal="true"><div class="modal-box" id="modalBox"></div></div>
+<div id="toasts" aria-live="polite"></div>
+
+<script src="vendor/qrcode.js"></script>
+<script src="vendor/jsQR.js"></script>
+<script src="js/native.js"></script>
+<script src="js/util.js"></script>
+<script src="js/nostr.js"></script>
+<script src="js/look.bundle.js"></script>
+<script src="js/avatar.js"></script>
+<script src="js/media.js"></script>
+<script src="js/mesh.js"></script>
+<script src="js/direct.js"></script>
+<script src="js/fmp4.js"></script>
+<script src="js/program.js"></script>
+<script src="js/rtmp.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

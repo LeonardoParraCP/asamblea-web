@@ -1,0 +1,6 @@
+/* Atkinson Hyperlegible y Silkscreen — SIL Open Font License 1.1 */
+@font-face{font-family:'Atkinson Hyperlegible';font-weight:400;font-display:swap;src:url(./atkinson-hyperlegible-latin-400-normal.woff2) format('woff2')}
+@font-face{font-family:'Atkinson Hyperlegible';font-weight:400;font-display:swap;src:url(./atkinson-hyperlegible-latin-ext-400-normal.woff2) format('woff2')}
+@font-face{font-family:'Atkinson Hyperlegible';font-weight:700;font-display:swap;src:url(./atkinson-hyperlegible-latin-700-normal.woff2) format('woff2')}
+@font-face{font-family:'Atkinson Hyperlegible';font-weight:700;font-display:swap;src:url(./atkinson-hyperlegible-latin-ext-700-normal.woff2) format('woff2')}
+@font-face{font-family:'Silkscreen';font-weight:400;font-display:swap;src:url(./Silkscreen-400-latin.woff2) format('woff2'),url(./Silkscreen-400-latin-ext.woff2) format('woff2')}

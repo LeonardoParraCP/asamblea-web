@@ -1,0 +1,107 @@
+/* Asamblea — capa de apariencia: todo sale de los tokens del skin (look.js). Se carga después de app.css.
+   Regla: los efectos son estáticos (sombras y bordes); lo único animado es opcional y nunca toca los videos. GPL-3.0-or-later */
+:root { --body: "Atkinson Hyperlegible", system-ui, sans-serif; --pattern: none; --emblem: none; --acc2: #d64a3c; --shadow: #000; --hl: #2a221b; }
+html, body { font-family: var(--body); }
+body { background: var(--bg) var(--pattern) repeat; background-size: 48px 48px; image-rendering: pixelated; }
+#lobby, #room { background: transparent; }
+.btn, .tabs button, .bar button, input, select, textarea { font-family: var(--body); }
+.btn.big, h1, h2, h3, h4, .tool span, .badge { font-family: var(--pix); }
+
+/* superficies con marco pixel: borde del acento y sombra dura en escalón */
+.card, .modal-box, .side { background: var(--card); border-color: var(--line2); }
+.card { box-shadow: 4px 4px 0 var(--shadow); }
+.btn.primary { box-shadow: 0 3px 0 var(--shadow); }
+.btn.primary:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--shadow); }
+.tabs button.on { background: var(--acc); color: var(--acc-ink); border-color: var(--acc); }
+
+/* emblema del skin: sello en la esquina de la tarjeta de acciones (no junto a los botones, para no confundirse con uno) */
+.brand .emblem { display: none; }
+.actions-card { position: relative; }
+.actions-card::after { content: ''; position: absolute; top: 12px; right: 14px; width: 32px; height: 32px; background: var(--emblem) center/contain no-repeat; image-rendering: pixelated; pointer-events: none; }
+/* teselas sin cámara: fondo del skin; el video sigue sobre negro */
+.tile { background: color-mix(in srgb, var(--card) 80%, #000); }
+.tile video:not(.hidden) { background: #000; }
+#room .stage-wrap { background: color-mix(in srgb, var(--bg) 70%, transparent); }
+.brand h1 { text-shadow: 2px 2px 0 var(--shadow); }
+
+/* ===== selector de apariencia ===== */
+.look-cats { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding-bottom: 4px; }
+.look-cats button { flex: none; background: var(--bg2); border: 2px solid var(--line); border-radius: var(--r); padding: 6px 10px; cursor: pointer; white-space: nowrap; }
+.look-cats button.on { border-color: var(--acc); background: var(--acc); color: var(--acc-ink); }
+.look-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 8px; max-height: 300px; overflow-y: auto; padding: 2px; margin: 8px 0; }
+.sw { position: relative; display: grid; grid-template-rows: 54px auto; text-align: left; padding: 0; border: 2px solid var(--line); border-radius: var(--r); overflow: hidden; cursor: pointer; background: var(--bg2); }
+.sw.on { border-color: var(--acc); box-shadow: 0 0 0 2px var(--acc); }
+.sw .art { background-repeat: repeat; background-size: 36px 36px; image-rendering: pixelated; position: relative; }
+.sw .art i { position: absolute; right: 6px; bottom: 6px; width: 26px; height: 26px; background-size: contain; image-rendering: pixelated; }
+.sw .art b { position: absolute; left: 6px; bottom: 6px; display: flex; gap: 3px; }
+.sw .art b span { width: 12px; height: 12px; border: 1px solid rgba(0,0,0,.35); }
+.sw .nm { padding: 5px 7px; font-size: 12px; line-height: 1.2; min-height: 34px; }
+.font-pv { border: 2px solid var(--line); border-radius: var(--r); padding: 10px 12px; background: var(--bg2); font-size: 18px; margin-top: 6px; }
+.font-pv small { display: block; font-family: var(--body); font-size: 12px; color: var(--mut); margin-top: 4px; }
+.char-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(74px, 1fr)); gap: 6px; max-height: 320px; overflow-y: auto; margin: 8px 0; }
+.char-grid button { display: grid; justify-items: center; gap: 3px; padding: 6px 3px; background: var(--bg2); border: 2px solid var(--line); border-radius: var(--r); cursor: pointer; font-size: 11px; line-height: 1.15; }
+.char-grid button.on { border-color: var(--acc); }
+.char-grid img { width: 48px; height: 48px; image-rendering: pixelated; background: var(--hl); }
+.seg .more { padding: 5px 10px; }
+
+/* enlace de sala: aviso de invitación y solicitudes para entrar */
+.landing { border: 2px solid var(--acc); border-radius: var(--r); padding: 10px 12px; margin: 0 0 12px; background: color-mix(in srgb, var(--acc) 12%, var(--bg2)); }
+.landing p { margin: 4px 0 8px; }
+p.landing { margin: 8px 0; }
+#knocks { position: fixed; top: calc(12px + var(--safe-t, 0px)); right: 12px; z-index: 40; display: grid; gap: 8px; width: min(420px, calc(100% - 24px)); }
+.knock { display: flex; align-items: center; gap: 10px; background: var(--card); border: 2px solid var(--acc); border-radius: var(--r); padding: 8px 10px; box-shadow: 0 8px 30px -8px rgba(0,0,0,.6); }
+.knock img { width: 40px; height: 40px; border-radius: 6px; image-rendering: pixelated; }
+.knock .hint { margin: 0; }
+body.t-corp .knock, body.t-corp .landing { border-width: 1px; }
+/* en el navegador no hay red local, IP ni transmisión */
+body.web .tabs [data-tab=tLan], body.web .tabs [data-tab=tIp], body.web #tLive { display: none; }
+
+/* ================= familias de efectos ================= */
+/* neón: tubos de luz, títulos con aberración de color, líneas de monitor sobre el inicio */
+body.fx.t-neon h1 { text-shadow: -1px 0 var(--acc2), 1px 0 var(--acc), 0 0 10px var(--glow), 0 0 26px var(--glow); }
+body.fx.t-neon .card { box-shadow: 0 0 0 1px color-mix(in srgb, var(--acc) 40%, transparent), 0 0 18px -4px var(--glow), 0 0 50px -20px var(--glow2); }
+body.fx.t-neon .btn.primary { box-shadow: 0 0 0 1.5px rgba(255,255,255,.5) inset, 0 0 14px var(--glow), 0 0 36px -8px var(--glow2); }
+body.fx.t-neon h2 { text-shadow: 0 0 8px var(--glow); }
+body.fx2.t-neon #lobby::before { content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background: repeating-linear-gradient(0deg, rgba(0,0,0,.18) 0 1px, transparent 1px 3px); }
+body.fx2.t-neon #lobby > * { position: relative; z-index: 1; }
+
+/* terminal (anarquistas): fósforo de un color, «>» en los títulos y cursor */
+body.t-term h2::before, body.t-term h3::before { content: '> '; color: var(--acc); }
+body.fx.t-term h1 { text-shadow: 0 0 2px #fff, 0 0 8px var(--glow), 0 0 22px var(--glow); }
+body.fx.t-term .card { box-shadow: 0 0 0 2px var(--acc), 0 0 22px -6px var(--glow); border-color: transparent; }
+body.fx.t-term .btn.primary { box-shadow: 0 0 14px var(--glow); }
+body.t-term h1::after { content: '_'; color: var(--acc); margin-left: 4px; }
+body.fx2.t-term h1::after { animation: asm-blink 1s steps(1) infinite; }
+@keyframes asm-blink { 50% { opacity: 0; } }
+
+/* antiguos (medievales, WoW, Elder Scrolls, hidromielería): marco de oro doble y aura arcana */
+body.t-old { --gold: color-mix(in srgb, var(--acc) 85%, #fff2c0); --arcane: color-mix(in srgb, var(--acc2) 75%, #9b7bff); }
+body.fx.t-old .card { border-color: var(--gold); box-shadow: 0 0 0 3px var(--card), 0 0 0 5px color-mix(in srgb, var(--gold) 55%, transparent), 6px 6px 0 5px var(--shadow); }
+body.fx.t-old h1 { text-shadow: 0 2px 0 var(--shadow), 0 0 10px color-mix(in srgb, var(--gold) 60%, transparent); }
+body.fx.t-old h2 { text-shadow: 0 1px 0 var(--shadow); }
+body.fx.t-old .btn.primary { background: linear-gradient(180deg, color-mix(in srgb, var(--acc) 80%, #fff) 0%, var(--acc) 45%, color-mix(in srgb, var(--acc) 75%, #000) 100%); box-shadow: inset 0 1px 0 rgba(255,255,255,.6), 0 3px 0 var(--shadow); }
+body.fx2.t-old .card { box-shadow: 0 0 0 3px var(--card), 0 0 0 5px color-mix(in srgb, var(--gold) 55%, transparent), 0 0 34px -8px var(--arcane), 6px 6px 0 5px var(--shadow); }
+
+/* corporativos (DEMOS Asuntos Públicos y consultoría): sin pixel ni brillos; bordes finos, sombras suaves, tipografía sobria */
+body.t-corp { image-rendering: auto; }
+body.t-corp .card { border-width: 1px; border-color: var(--line); border-radius: 10px; box-shadow: 0 1px 2px rgba(0,0,0,.12), 0 8px 28px -12px rgba(0,0,0,.28); }
+body.t-corp .card::before { content: ''; display: block; height: 3px; margin: -16px -16px 14px; border-radius: 10px 10px 0 0; background: linear-gradient(90deg, var(--acc), var(--acc2)); }
+body.t-corp .actions-card::after, body.t-corp .brand .emblem { display: none; }
+body.t-corp h1 { font-weight: 700; letter-spacing: .2px; text-shadow: none; color: var(--ink); }
+body.t-corp h1::first-letter { color: var(--acc); }
+body.t-corp h2, body.t-corp h3, body.t-corp h4 { font-weight: 700; letter-spacing: .1px; }
+body.t-corp h2 { color: var(--acc); font-size: 13px; text-transform: uppercase; letter-spacing: 1.4px; }
+body.t-corp .btn, body.t-corp input, body.t-corp select, body.t-corp textarea, body.t-corp .seg button, body.t-corp .tabs button { border-width: 1px; }
+body.t-corp .btn.primary { box-shadow: none; font-weight: 700; letter-spacing: .3px; }
+body.t-corp .btn.primary:active { transform: none; }
+body.t-corp .btn.big { text-transform: none; }
+body.t-corp .tile { border-width: 1px; border-radius: 10px; }
+body.t-corp .bar { box-shadow: 0 -1px 0 var(--line) !important; }
+body.t-corp .modal-box { border-width: 1px; border-radius: 12px; }
+
+/* en la sala, solo la barra y los paneles llevan efectos; los videos quedan limpios */
+body.fx.t-neon .bar, body.fx.t-term .bar { box-shadow: 0 -1px 0 var(--acc), 0 -10px 30px -18px var(--glow); }
+body.fx.t-old .bar { box-shadow: 0 -2px 0 var(--gold); }
+
+@media (prefers-reduced-motion: reduce) { body h1::after { animation: none !important; } }
